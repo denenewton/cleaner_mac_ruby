@@ -46,7 +46,9 @@ module Cleaner
 
     pastas_usuario.each do |raiz|
       next unless Dir.exist?(raiz)
-      puts "\n🔍 Analisando: #{raiz}"
+      # Só imprime se NÃO estiver vazia
+      puts "\n🔍 Analisando: #{raiz}" if !Dir.empty?(raiz)
+
 
       Find.find(raiz) do |caminho|
         if File.directory?(caminho)
@@ -119,7 +121,10 @@ module Cleaner
       end
 
       # Som de sucesso
-      system("afplay /System/Library/Components/CoreAudio.component/Contents/SharedSupport/SystemSounds/dock/drag\ to\ trash.aif")
+      som = "/System/Library/Components/CoreAudio.component/Contents/SharedSupport/SystemSounds/dock/drag to trash.aif"
+      # -v 2 (dobro do volume normal)
+      # -t 1 (toca apenas 1 segundo do arquivo)
+      system("afplay", "-v", "2", "-t", "2", som)
       # 2. Reinicia o Finder para atualizar o sistema
       puts "🔄 Reiniciando o Finder..."
       system("killall Finder")
